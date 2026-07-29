@@ -1,69 +1,65 @@
-# Marketing AI Agent (n8n)
+# 🚀 Marketing AI Agent (n8n)
 
-Hệ thống AI Agent tự động hóa marketing cho **ISTAL – Viện Khoa học Công nghệ và Pháp luật**, xây dựng trên n8n. Người dùng nhắn tin (chữ hoặc voice) qua Telegram, một agent trung tâm sẽ hiểu yêu cầu và tự động giao việc cho đúng workflow con để tạo ảnh, video, bài blog, bài social hoặc làm SEO.
+Hệ thống AI Agent tự động hóa marketing đa kênh được xây dựng trên nền tảng **n8n**. 
 
-## 1. Kiến trúc tổng quan
+Người dùng chỉ cần gửi yêu cầu (văn bản hoặc tin nhắn thoại) qua **Telegram**, Agent trung tâm sẽ tự động phân tích ý định và điều phối công việc đến các workflow con tương ứng để tạo ảnh, làm video, viết bài blog, bài đăng mạng xã hội (social) hoặc thực hiện các tác vụ SEO.
 
-```
-Telegram (voice/text)
-        │
-        ▼
-   MAIN_MARKETING  ← workflow chính (bộ não điều phối)
-        │  (gọi các workflow con như "tool")
-        ├── Create_Image        → tạo ảnh mới
-        ├── Edit_image          → sửa ảnh có sẵn
-        ├── blog_post           → viết bài blog + ảnh minh họa
-        ├── social_content      → viết bài Facebook/LinkedIn
-        ├── product_content_workflow → nội dung trang sản phẩm
-        ├── seo_task            → nghiên cứu từ khóa, audit SEO, topical map
-        └── video_faceless      → tạo video POV không lộ mặt (YouTube Shorts)
-```
+---
 
-`MAIN_MARKETING` không tự làm nội dung — nó chỉ **đọc yêu cầu, chọn đúng tool, rồi gọi workflow con tương ứng** (mô hình AI Agent + Tool trong n8n).
+## 🏗️ 1. Kiến Trúc Tổng Quan
 
-## 2. Các file workflow
+**`MAIN_MARKETING`** đóng vai trò là "Bộ nào điều phối" trung tâm. Workflow này không trực tiếp khởi tạo nội dung mà đọc yêu cầu người dùng, phân tích ngữ cảnh, lựa chọn công cụ (tool) phù hợp và kích hoạt workflow con tương ứng (áp dụng mô hình *AI Agent + Tools* trong n8n).
 
-| File | Vai trò |
-|---|---|
-| `MAIN_MARKETING.json` | Workflow chính. Nhận tin nhắn Telegram (chữ hoặc voice), phân loại, điều phối tới các tool bên dưới bằng AI Agent (Google Gemini). |
-| `Create_Image.json` | Nhận brief → viết prompt ảnh chi tiết → gọi Imagen 4 để tạo ảnh → lưu Google Drive + log vào Google Sheets → gửi ảnh qua Telegram. |
-| `Edit_image.json` | Nhận ảnh (từ Drive hoặc URL ngoài) + yêu cầu chỉnh sửa → tải ảnh → tạo ảnh mới theo yêu cầu → lưu Drive + log Sheets → gửi qua Telegram. |
-| `blog_post.json` | Nhận chủ đề + đối tượng độc giả → nghiên cứu → viết bài blog chuẩn SEO → tạo ảnh minh họa → lưu vào Google Docs, log Sheets, gửi Telegram. |
-| `product_content_workflow.json` | Viết nội dung giới thiệu sản phẩm kèm ảnh, lưu Google Docs/Sheets. |
-| `social_content.json` | Viết bài đăng Facebook/LinkedIn theo chủ đề + đối tượng, kèm ảnh minh họa. |
-| `seo_task.json` | 4 agent con: nghiên cứu từ khóa, tạo topical map, audit SEO, và viết title/URL/meta description. |
-| `video_faceless.json` | Tạo kịch bản 3 phần → gọi model Veo 3.1 tạo video → ghép/dựng → lưu Drive → gửi Telegram. |
+---
 
-## 3. Luồng hoạt động (ví dụ)
+## 📁 2. Danh Sách Workflow & Vai Trò
 
-1. Người dùng nhắn Telegram: *"Viết cho tôi 1 bài blog về AI trong sản xuất"*.
-2. `MAIN_MARKETING` nhận tin nhắn → AI Agent (Gemini) hiểu ý định → gọi tool **blogPost**.
-3. Workflow `blog_post` chạy: nghiên cứu chủ đề → viết bài → tạo ảnh minh họa → lưu Google Docs, log vào Google Sheets, gửi bản nháp qua Telegram để duyệt.
-4. Kết quả (link Docs, link ảnh) được trả lại cho người dùng qua Telegram.
+| Tệp Workflow | Vai Trò & Chức Năng |
+| :--- | :--- |
+| **`MAIN_MARKETING.json`** | Workflow chính. Nhận tin nhắn Telegram (chữ hoặc voice), phân loại và điều phối tới các tool bằng AI Agent (Google Gemini). |
+| **`Create_Image.json`** | Nhận brief → Viết prompt chi tiết → Gọi Imagen 4 sinh ảnh → Lưu Google Drive + Log Google Sheets → Gửi ảnh qua Telegram. |
+| **`Edit_image.json`** | Nhận ảnh (Drive/URL) + Yêu cầu chỉnh sửa → Tải ảnh → Tạo ảnh mới theo yêu cầu → Lưu Drive + Log Sheets → Gửi qua Telegram. |
+| **`blog_post.json`** | Nhận chủ đề + Đối tượng độc giả → Nghiên cứu → Viết bài blog chuẩn SEO → Tạo ảnh minh họa → Lưu Google Docs + Log Sheets → Gửi Telegram. |
+| **`product_content_workflow.json`** | Viết nội dung giới thiệu sản phẩm kèm ảnh minh họa, tự động lưu vào Google Docs & Sheets. |
+| **`social_content.json`** | Viết bài đăng Facebook/LinkedIn theo chủ đề + Đối tượng mục tiêu, kèm ảnh minh họa. |
+| **`seo_task.json`** | Tích hợp 4 Agent con: Nghiên cứu từ khóa, tạo Topical Map, Audit SEO, và viết Title/URL/Meta Description. |
+| **`video_faceless.json`** | Tạo kịch bản 3 phần → Gọi model Veo 3.1 tạo video → Ghép/Dựng video → Lưu Drive → Gửi Telegram. |
 
-Tương tự với "tạo ảnh", "sửa ảnh", "viết bài social", "làm SEO", "tạo video"…
+---
 
-## 4. Yêu cầu để chạy được
+## 🔄 3. Luồng Hoạt Động (Ví dụ minh họa)
 
-- Một instance **n8n** (self-host hoặc cloud) đã bật node cộng đồng `@n8n/n8n-nodes-langchain`.
-- Import đủ **8 file JSON** vào cùng một n8n instance (các workflow con được `MAIN_MARKETING` gọi theo `workflowId`, nên cần import trước và giữ nguyên ID, hoặc cập nhật lại `workflowId` sau khi import).
-- Credentials cần cấu hình lại trong n8n (không đi kèm trong file JSON, phải tự kết nối):
-  - **Telegram Bot API** (nhận/gửi tin nhắn, ảnh, video)
-  - **Google Drive OAuth2** (lưu ảnh/video)
-  - **Google Sheets OAuth2** (log lịch sử tạo nội dung)
-  - **Google Docs OAuth2** (lưu bài blog/nội dung)
-  - **Google Gemini (PaLM) API** (agent + sinh ảnh Imagen 4 + video Veo 3.1)
+1. **Gửi yêu cầu:** Người dùng nhắn qua Telegram: *"Viết cho tôi 1 bài blog về AI trong sản xuất"*.
+2. **Điều phối:** `MAIN_MARKETING` nhận tin nhắn → AI Agent (Gemini) phân tích ý định → Định tuyến và kích hoạt tool `blogPost`.
+3. **Thực thi:** Workflow `blog_post` tiến hành:
+   * Nghiên cứu chủ đề.
+   * Viết bài blog chuẩn SEO.
+   * Sinh ảnh minh họa.
+   * Lưu trữ tệp vào Google Docs, ghi nhật ký vào Google Sheets, gửi bản nháp qua Telegram.
+4. **Phản hồi:** Trả kết quả (link Google Docs, link ảnh) trực tiếp cho người dùng qua Telegram.
 
-## 5. ⚠️ Lưu ý bảo mật quan trọng
+*(Quy trình tương tự được áp dụng cho các tác vụ "Tạo ảnh", "Sửa ảnh", "Bài Social", "SEO", "Tạo video"...)*
 
-Trong `Create_Image.json` và `Edit_image.json`, node gọi Imagen đang **gắn cứng API key Google (`x-goog-api-key`) trực tiếp trong file**. Trước khi dùng lại hoặc chia sẻ file này, bạn nên:
-- Thu hồi/tạo lại key đó trên Google Cloud Console (vì đã lộ trong file).
-- Chuyển key sang lưu dưới dạng **Credential** trong n8n thay vì hard-code trong node, để tránh lộ khi chia sẻ workflow.
+---
 
-## 6. Thông tin thương hiệu đã cấu hình sẵn trong agent
+## ⚙️ 4. Yêu Cầu Cài Đặt & Cấu Hình
 
-- **Tên:** Viện Khoa học Công nghệ và Pháp luật (ISTAL)
-- **Website:** https://khoahocvaphapluat.vn
-- **Đối tượng mục tiêu:** cơ quan nhà nước, nhà hoạch định chính sách, chuyên gia pháp lý, doanh nghiệp, nhà nghiên cứu quan tâm đến giải pháp pháp lý – công nghệ – tiêu chuẩn.
+* **Nền tảng:** Cần một instance n8n (Self-host hoặc Cloud) đã kích hoạt community node `@n8n/n8n-nodes-langchain`.
+* **Import Workflows:** Import đầy đủ 8 tệp JSON vào n8n. 
+  > ⚠️ **Lưu ý:** `MAIN_MARKETING` gọi các workflow con bằng `workflowId`. Hãy giữ nguyên ID sau khi import hoặc cập nhật lại `workflowId` tương ứng trong node gọi tool.
+* **Cấu hình Credentials (Kết nối):**
+  * **Telegram Bot API:** Nhận/gửi tin nhắn, hình ảnh, video.
+  * **Google Drive OAuth2:** Lưu trữ hình ảnh và video đã khởi tạo.
+  * **Google Sheets OAuth2:** Ghi log lịch sử khởi tạo nội dung.
+  * **Google Docs OAuth2:** Lưu nội dung bài viết blog/sản phẩm.
+  * **Google Gemini (PaLM) API:** Cung cấp năng lực cho Agent, sinh ảnh Imagen 4 và tạo video Veo 3.1. *(Đảm bảo khai báo API Key trong Credentials/Environment của n8n thay vì dán trực tiếp trong node)*.
 
-Có thể chỉnh phần này trong `systemMessage` của node **AI Marketing Agent** (trong `MAIN_MARKETING.json`) nếu áp dụng cho thương hiệu khác.
+---
+
+## 🏢 5. Cấu Hình Thông Tin Thương Hiệu
+
+Bạn có thể tùy chỉnh thông tin thương hiệu phù hợp với doanh nghiệp của mình bằng cách thay đổi phần `systemMessage` trong node `AI Marketing Agent` thuộc tệp `MAIN_MARKETING.json`:
+
+* **Tên tổ chức/thương hiệu:** [Tên thương hiệu của bạn]
+* **Website:** `https://your-domain.com`
+* **Đối tượng mục tiêu:** [Mô tả khách hàng/độc giả mục tiêu của bạn]
