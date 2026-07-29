@@ -1,0 +1,554 @@
+{
+    "name": "Edit image",
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "image"
+                        },
+                        {
+                            "name": "request"
+                        },
+                        {
+                            "name": "chatID"
+                        },
+                        {
+                            "name": "pictureID"
+                        },
+                        {
+                            "name": "ImageUrl"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -128,
+                224
+            ],
+            "id": "13ba123e-d3d7-440f-84f7-9ad18fe438bd",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "content": "# Write to Drive & Sheets",
+                "height": 240,
+                "width": 760,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                1040,
+                208
+            ],
+            "id": "7815879b-0d24-49ea-9749-9ba5251f84a9",
+            "name": "Sticky Note6"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.ImageUrl }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                384,
+                448
+            ],
+            "id": "7764ecb9-644c-4b02-9d5b-5407b50880de",
+            "name": "Download Image"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "4d7ec0ea-1c30-4a8f-a990-2283f769f9d7",
+                            "leftValue": "={{ $json.ImageUrl }}",
+                            "rightValue": "drive.google.com",
+                            "operator": {
+                                "type": "string",
+                                "operation": "contains"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                192,
+                224
+            ],
+            "id": "d5b8f45a-ee31-47ab-a1fe-3beb24fc1462",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "63bd9ce9-4219-487f-b2f4-c95e733e9252",
+                            "name": "Image Link",
+                            "value": "={{ $json.webViewLink }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1344,
+                272
+            ],
+            "id": "ae88795d-2046-4b81-9e5a-08ab25529db2",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "content": "Checks if the image is from Google Drive or an external URL",
+                "height": 80
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                32,
+                400
+            ],
+            "typeVersion": 1,
+            "id": "57656478-c49c-446e-af36-9f3adf51441a",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "content": "If from Google Drive: Downloads directly from Drive",
+                "height": 80
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                608,
+                32
+            ],
+            "typeVersion": 1,
+            "id": "46c6094d-ba00-4c83-a1e3-9d1504d42f9c",
+            "name": "Sticky Note8"
+        },
+        {
+            "parameters": {
+                "content": "Formats the Google Drive link for display to the user",
+                "height": 80,
+                "width": 180
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                1504,
+                544
+            ],
+            "typeVersion": 1,
+            "id": "9a3a2502-8cc2-4fe3-8621-69ea944dab7f",
+            "name": "Sticky Note10"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk",
+                    "mode": "list",
+                    "cachedResultName": "Marketing Team Log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "image_log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Tên Image": "={{ $('When Executed by Another Workflow').item.json.image }}",
+                        "Yêu cầu": "={{ $('When Executed by Another Workflow').item.json.request }}",
+                        "ID": "={{ $('Up Google Drive').item.json.id }}",
+                        "Type": "Edit",
+                        "Link": "={{ $('Up Google Drive').item.json.webViewLink }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "Tên Image",
+                            "displayName": "Tên Image",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Type",
+                            "displayName": "Type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Yêu cầu",
+                            "displayName": "Yêu cầu",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "ID",
+                            "displayName": "ID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Link",
+                            "displayName": "Link",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "post",
+                            "displayName": "post",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.5,
+            "position": [
+                1584,
+                272
+            ],
+            "id": "3c68c631-5815-489d-ba64-72c5b4023bf5",
+            "name": "Image Log",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "MrmPbaOd6JuX0F4J",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "sendPhoto",
+                "chatId": "={{ $('When Executed by Another Workflow').item.json.chatID }}",
+                "binaryData": true,
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                1120,
+                544
+            ],
+            "id": "1a729c9a-8e41-4b00-880f-8ccf937ef8bf",
+            "name": "Send Photo",
+            "webhookId": "85dc0064-e5c5-45a9-91a5-60e5b2bc4f1e",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "# Send Content",
+                "height": 240,
+                "width": 300,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                1040,
+                464
+            ],
+            "id": "a965a01f-bded-4d96-bde3-897ba0c803b2",
+            "name": "Sticky Note7"
+        },
+        {
+            "parameters": {
+                "operation": "download",
+                "fileId": {
+                    "__rl": true,
+                    "value": "={{ $('When Executed by Another Workflow').item.json.pictureID }}",
+                    "mode": "id"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                432,
+                32
+            ],
+            "id": "8c6c3b29-444e-4d17-82a3-517dc8808e49",
+            "name": "Download Ảnh",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "name": "={{ $('When Executed by Another Workflow').item.json.image + \"_edited\" }}",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "folderId": {
+                    "__rl": true,
+                    "value": "11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r",
+                    "mode": "list",
+                    "cachedResultName": "Marketing AI Agent All",
+                    "cachedResultUrl": "https://drive.google.com/drive/folders/11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                1120,
+                272
+            ],
+            "id": "9cff9f77-c0d1-4d6a-8d3e-641f0e655935",
+            "name": "Up Google Drive",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "Checks if the image is from Google Drive or an external URL",
+                "height": 80
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                0,
+                0
+            ],
+            "typeVersion": 1,
+            "id": "96fcec98-c174-458e-b32b-876938083eb1",
+            "name": "Sticky Note11"
+        },
+        {
+            "parameters": {
+                "operation": "toBinary",
+                "sourceProperty": "predictions[0].bytesBase64Encoded",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                848,
+                448
+            ],
+            "id": "7f5fd193-13d5-48f7-b078-6eb0aa9f4dbb",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"instances\": [\n    {\n      \"prompt\": \"{{ $('When Executed by Another Workflow').item.json.request }}\"\n    }\n  ],\n  \"parameters\": {\n    \"sampleCount\": 1\n  }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                608,
+                448
+            ],
+            "id": "3d260199-6443-43e7-8935-a0c4ce6fc329",
+            "name": "Generate Image"
+        }
+    ],
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "image": "Con Chó",
+                    "request": "Hãy thay đổi bộ lông con chó thành màu vàng nguyên khối",
+                    "chatID": 8472132121,
+                    "pictureID": 0,
+                    "ImageUrl": "https://images.pexels.com/photos/7800873/pexels-photo-7800873.jpeg"
+                }
+            }
+        ]
+    },
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download Image": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Download Ảnh",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Download Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Image Log",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download Ảnh": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Up Google Drive": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Send Photo",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Up Google Drive",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Image": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "versionId": "e3df315c-fc8d-4470-b070-8d3a58d52fad",
+    "meta": {
+        "instanceId": "d28dce04d14105a64d685c9dbc67db247f417436be8530e966601ef9b0f25772"
+    },
+    "id": "feu6Qs2Wjf26bL3z",
+    "tags": [
+        {
+            "updatedAt": "2026-07-10T07:36:40.917Z",
+            "createdAt": "2026-07-10T07:36:40.917Z",
+            "id": "N2VV1dcbI0BSHW5K",
+            "name": "marketing-automation"
+        }
+    ]
+}

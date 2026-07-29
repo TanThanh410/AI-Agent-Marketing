@@ -1,0 +1,563 @@
+{
+    "name": "product content workflow",
+    "nodes": [
+        {
+            "parameters": {
+                "content": "# Content Generation",
+                "height": 260,
+                "width": 380
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1616,
+                176
+            ],
+            "id": "0bb5693e-9ac7-4f36-bac1-fabd35c6d929",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "content": "# Generate Image\n",
+                "height": 276,
+                "width": 1192,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1216,
+                176
+            ],
+            "id": "42b269ab-d15f-4f3a-85f6-a158abffe4f5",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "content": "## Tool & Model",
+                "height": 304,
+                "width": 420,
+                "color": 7
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1632,
+                480
+            ],
+            "id": "b59d1218-1760-4197-bf6e-951e443dff7d",
+            "name": "Sticky Note2"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "Product_detail"
+                        },
+                        {
+                            "name": "chatID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1808,
+                288
+            ],
+            "id": "114413f9-912f-4d4a-b915-d294034c4116",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Tạo dựng cho tôi một bài viết về Viện Khoa Học Công Nghệ  và Pháp Luật cụ thể. thông tin về nội dung đó là: \"{{ $('When Executed by Another Workflow').item.json.Product_detail }}\"\n",
+                "options": {
+                    "systemMessage": "=# 🎯 Prompt: Bộ Nội Dung Content Marketing & SEO Pháp Lý\n\n> **Vai trò:** Bạn là chuyên gia Content Marketing & SEO chuyên ngành pháp lý, với 10+ năm kinh nghiệm xây dựng nội dung chuẩn E-E-A-T (Experience – Expertise – Authoritativeness – Trustworthiness) cho thị trường Việt Nam.\n\n---\n\n## 📌 Thông Số Đầu Vào\n\n| Biến | Giá trị |\n|---|---|\n| `{{TOPIC}}` | *(Nhập chủ đề pháp lý cụ thể, ví dụ: \"Hợp đồng lao động thử việc\")* |\n| `{{ANGLE}}` | *(Nhập góc nhìn sáng tạo, ví dụ: \"Góc độ người lao động bị thiệt thòi\")* |\n| `{{TARGET_AUDIENCE}}` | *(Nhập đối tượng mục tiêu, ví dụ: \"Người lao động văn phòng 25–40 tuổi\")* |\n| `{{PRIMARY_KEYWORD}}` | *(Nhập từ khóa SEO chính, ví dụ: \"hợp đồng thử việc bao lâu\")* |\n\n> ⚠️ **Quan trọng:** Mỗi lần chạy prompt, hãy thay đổi `{{ANGLE}}` để đảm bảo nội dung không trùng lặp và tiếp cận độc giả từ góc nhìn mới.\n\n---\n\n## 📦 Yêu Cầu Đầu Ra\n\nTạo đầy đủ **6 hạng mục** nội dung sau theo đúng thứ tự:\n\n---\n\n### 1. 📝 Bài Viết SEO Dài (Bài Trụ Cột — Pillar Content)\n\n**Yêu cầu kỹ thuật:**\n- Độ dài: **tối thiểu 1.500 từ** (ưu tiên 2.000–2.500 từ)\n- Ngôn ngữ: Tiếng Việt, văn phong chuyên gia nhưng dễ đọc\n- Tối ưu cho từ khóa: `{{PRIMARY_KEYWORD}}`\n\n**Cấu trúc bắt buộc:**\n\n```\n[META TITLE] — Dưới 60 ký tự, có từ khóa chính\n[META DESCRIPTION] — 150–160 ký tự, có CTA ngầm\n\n# H1: [Tiêu đề chính — có từ khóa]\n\n## H2: Mở đầu — Tại sao chủ đề này quan trọng?\n   → Móc đau điểm của {{TARGET_AUDIENCE}}\n\n## H2: Khái niệm & Cơ sở pháp lý\n   ### H3: Định nghĩa theo luật\n   ### H3: Điều khoản hiện hành\n\n## H2: Phân Tích Thực Tiễn & So Sánh Thị Trường\n   → Bảng so sánh hoặc dữ liệu minh họa\n   → Góc nhìn theo {{ANGLE}}\n\n## H2: Những Sai Lầm Phổ Biến & Rủi Ro Pháp Lý\n   ### H3: Sai lầm thường gặp\n   ### H3: Hậu quả pháp lý\n\n## H2: Hướng Dẫn Thực Hành / Checklist\n\n## H2: Kết luận & CTA\n   → Kêu gọi tư vấn / đọc thêm / liên hệ\n```\n\n**Yếu tố thuyết phục bắt buộc:**\n- [ ] Ít nhất 1 bảng so sánh dữ liệu\n- [ ] Ít nhất 1 ví dụ tình huống thực tế (case study ngắn)\n- [ ] Bullet-point checklist hành động\n- [ ] Thống kê hoặc con số thị trường\n\n---\n\n### 2. ⚖️ Trích Dẫn Nguồn Pháp Lý & Học Thuật\n\nCung cấp **tối thiểu 3 nguồn** theo thứ tự ưu tiên:\n\n| Ưu tiên | Loại nguồn | Ví dụ |\n|---|---|---|\n| 🥇 Ưu tiên 1 | Luật, Bộ luật, Nghị định Việt Nam | Bộ luật Lao động 2019, NĐ số 145/2020/NĐ-CP |\n| 🥈 Ưu tiên 2 | Thông tư, Hướng dẫn của Bộ | Thông tư 10/2020/TT-BLĐTBXH |\n| 🥉 Ưu tiên 3 | Bài nghiên cứu Scopus/ISI hoặc báo cáo uy tín | Nếu phù hợp với chủ đề |\n\n**Định dạng trích dẫn:**\n```\n[1] Tên văn bản — Số hiệu — Ngày ban hành — Điều khoản liên quan\n[2] ...\n[3] ...\n```\n\n---\n\n### 3. 🖼️ Ý Tưởng Hình Ảnh Website\n\nTạo **2 ý tưởng hình ảnh** kèm prompt chi tiết để tạo bằng AI (Midjourney / DALL-E / Firefly):\n\n**Hình ảnh 1 — Hero Banner:**\n```\nMục đích: [Mô tả vai trò hình ảnh trên trang]\nPhong cách: [Phong cách thiết kế, màu sắc]\nPrompt AI: \"[Prompt tiếng Anh chi tiết, 50–80 từ, kèm style, lighting, composition]\"\nGhi chú: [Hướng dẫn bổ sung cho designer]\n```\n\n**Hình ảnh 2 — Infographic / Section Visual:**\n```\nMục đích: [Mô tả vai trò hình ảnh]\nPhong cách: [Phong cách thiết kế]\nPrompt AI: \"[Prompt tiếng Anh chi tiết]\"\nGhi chú: [Hướng dẫn bổ sung]\n```\n\n---\n\n### 4. 🛰️ 5 Bài Vệ Tinh SEO (Satellite Content)\n\nMỗi bài viết phải:\n- Dài **tối thiểu 300 từ**\n- Tiếp cận chủ đề từ **một góc độ khác nhau**\n- Có **CTA rõ ràng** dẫn link về bài trụ cột\n- **Không trùng nội dung** với nhau và với bài trụ cột\n\n| # | Nền tảng | Góc tiếp cận đề xuất | Tone |\n|---|---|---|---|\n| 1 | **Blogger** | Kinh nghiệm cá nhân / storytelling | Thân mật, chia sẻ |\n| 2 | **WordPress** | Hướng dẫn step-by-step | Chuyên nghiệp, có cấu trúc |\n| 3 | **Medium** | Phân tích sâu / góc nhìn chuyên gia | Tư duy, mang tính tranh luận |\n| 4 | **Google Sites** | FAQ & Hỏi đáp thường gặp | Rõ ràng, súc tích |\n| 5 | **Tumblr** | Visual-first, danh sách ngắn | Trẻ trung, dễ chia sẻ |\n\n**Cấu trúc mỗi bài vệ tinh:**\n```\nTiêu đề: [Có từ khóa đuôi dài liên quan]\nMở đầu: [Hook 2–3 câu]\nNội dung chính: [...]\nCTA: \"Đọc hướng dẫn đầy đủ tại: [URL bài trụ cột]\"\nTags/Labels: [3–5 thẻ phù hợp với nền tảng]\n```\n\n---\n\n### 5. 🎬 Kịch Bản Video TikTok Viral\n\n**Thông số:**\n- Thời lượng: 45–60 giây\n- Format: Script theo từng cảnh (scene-by-scene)\n\n**Cấu trúc kịch bản:**\n\n```\n🎣 HOOK (3 giây đầu — BẮT BUỘC):\n   → Câu hỏi gây sốc HOẶC con số bất ngờ HOẶC tuyên bố gây tranh cãi\n   → Ví dụ: \"90% người lao động không biết điều này và đã mất tiền oan!\"\n\n📖 NỘI DUNG CHÍNH (30–40 giây):\n   Cảnh 1 — [Giây 4–15]: [Mô tả hành động + lời thoại]\n   Cảnh 2 — [Giây 16–30]: [Mô tả hành động + lời thoại]\n   Cảnh 3 — [Giây 31–45]: [Mô tả hành động + lời thoại]\n\n📢 CTA MẠNH (5–10 giây cuối):\n   → Dạng: Follow + Save + Comment / Link bio\n   → Ví dụ: \"Save video này lại! Link hướng dẫn đầy đủ trong bio 👇\"\n\n🎵 ÂM THANH GỢI Ý: [Đề xuất trend âm thanh phù hợp]\n\n#️⃣ HASHTAG (15–20 thẻ):\n   → Bao gồm: hashtag viral chung + hashtag chuyên ngành + hashtag địa phương\n```\n\n---\n\n### 6. 📱 Caption Mạng Xã Hội\n\n#### Caption Facebook\n```\nĐộ dài: 150–300 từ\nCấu trúc:\n   - Dòng đầu (hook): Câu hỏi hoặc tuyên bố gây chú ý\n   - Thân bài: 3–4 điểm giá trị ngắn gọn\n   - CTA: Tag bạn bè cần biết / Comment câu hỏi / Click link\n   - Emoji: Dùng tiết chế, 3–5 emoji chiến lược\n```\n\n#### Caption TikTok\n```\nĐộ dài: 100–150 ký tự (ngắn gọn, có từ khóa)\nCấu trúc:\n   - 1 câu hook + emoji\n   - 3–5 hashtag chính\n   - 1 CTA (Follow / Link bio / Duet)\n```\n\n---\n\n## ✅ Checklist Chất Lượng Trước Khi Xuất Nội Dung\n\nTrước khi trả về kết quả, hãy tự kiểm tra:\n\n- [ ] Tất cả nội dung có dùng từ khóa `{{PRIMARY_KEYWORD}}` tự nhiên, không nhồi nhét\n- [ ] Góc nhìn `{{ANGLE}}` được thể hiện rõ trong bài trụ cột và ít nhất 2 bài vệ tinh\n- [ ] 5 bài vệ tinh **không trùng nội dung** nhau\n- [ ] Mỗi CTA trong bài vệ tinh có dẫn về **bài trụ cột**\n- [ ] Tất cả trích dẫn pháp lý có **số hiệu văn bản và điều khoản cụ thể**\n- [ ] Hook TikTok đảm bảo gây tò mò trong **3 giây đầu**\n- [ ] Văn phong nhất quán: **chuyên gia nhưng gần gũi**, không quá hàn lâm\n\n---\n\n## 🔄 Gợi Ý Thay Đổi `{{ANGLE}}` Mỗi Lần Chạy\n\n| Lần | Góc nhìn gợi ý |\n|---|---|\n| 1 | Góc độ **người bị hại / nạn nhân** — nhấn mạnh rủi ro |\n| 2 | Góc độ **chủ doanh nghiệp** — tuân thủ và tránh rủi ro pháp lý |\n| 3 | Góc độ **so sánh quốc tế** — Việt Nam vs. thông lệ quốc tế |\n| 4 | Góc độ **lịch sử pháp lý** — sự thay đổi của luật theo thời gian |\n| 5 | Góc độ **thực tế vs. lý thuyết** — luật ghi thế, thực tế lại khác |\n| 6 | Góc độ **Gen Z / thế hệ mới** — cách tiếp cận hiện đại |\n\n---\n\n*Prompt được thiết kế bởi: Legal Content Marketing Framework v2.0*\n*Cập nhật: 2025 — Tương thích với Google Helpful Content Update & E-E-A-T Guidelines*"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.9,
+            "position": [
+                -1552,
+                288
+            ],
+            "id": "e02d410f-0634-4a92-9e55-2c873bedae74",
+            "name": "Blog Post Agent"
+        },
+        {
+            "parameters": {
+                "chatId": "={{ $('When Executed by Another Workflow').item.json.chatID }}",
+                "text": "=1. Tiêu đề: \"{{ $('Blog Post Agent').item.json.output.split('\\n')[0].replace('# ', '') || $json.topic }}\"\n\n2. Đường dẫn bài viết:\n<a href=\"https://docs.google.com/document/d/{{ $('Update GG Doc').item.json.documentId }}/edit?usp=sharing\">Product content - file doc</a>",
+                "additionalFields": {
+                    "parse_mode": "HTML"
+                }
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                272,
+                192
+            ],
+            "id": "1c701880-9472-4bc8-9fe5-1473fee182c5",
+            "name": "Send Blog",
+            "webhookId": "94fa70af-f2fc-4c05-8fa1-d9f55637485f",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "# Trigger\n",
+                "height": 260,
+                "width": 260,
+                "color": 7
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1888,
+                176
+            ],
+            "id": "89fe28e4-5c00-4bcd-88f8-02e306cbfe5c",
+            "name": "Sticky Note5",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "content": "# Write to Drive & Sheets",
+                "height": 240,
+                "width": 460,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                0,
+                448
+            ],
+            "id": "265b9870-c4e8-4610-bd08-50d6edf8ef26",
+            "name": "Sticky Note6"
+        },
+        {
+            "parameters": {
+                "content": "# Send Content & Image",
+                "height": 436,
+                "width": 460,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "54e17573-6cbc-40f4-a5d7-8a15a533402e",
+            "name": "Sticky Note7"
+        },
+        {
+            "parameters": {
+                "folderId": "11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r",
+                "title": "={{ $('When Executed by Another Workflow').item.json.Product_detail }} - Content detail"
+            },
+            "type": "n8n-nodes-base.googleDocs",
+            "typeVersion": 2,
+            "position": [
+                -1136,
+                288
+            ],
+            "id": "a187d610-450d-4ee5-99f9-db6179e61fce",
+            "name": "Google Docs",
+            "credentials": {
+                "googleDocsOAuth2Api": {
+                    "id": "i9btxmfAwBRvnB1N",
+                    "name": "Google Docs account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentURL": "={{ $json.id }}",
+                "actionsUi": {
+                    "actionFields": [
+                        {
+                            "action": "insert",
+                            "text": "={{ $('Blog Post Agent').item.json.output }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.googleDocs",
+            "typeVersion": 2,
+            "position": [
+                -944,
+                288
+            ],
+            "id": "463b1d64-893b-4a1e-a9a8-848569c049e4",
+            "name": "Update GG Doc",
+            "credentials": {
+                "googleDocsOAuth2Api": {
+                    "id": "i9btxmfAwBRvnB1N",
+                    "name": "Google Docs account"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "@n8n/n8n-nodes-langchain.toolThink",
+            "typeVersion": 1,
+            "position": [
+                -1328,
+                592
+            ],
+            "id": "dc413a05-09cf-4432-958a-eb7eaf84df5c",
+            "name": "Think"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk",
+                    "mode": "list",
+                    "cachedResultName": "Marketing Workflow All",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "content_log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Task Type": "Product detail",
+                        "ID": "={{ $('When Executed by Another Workflow').item.json.Product_detail }}",
+                        "Result": "={{ $('Blog Post Agent').item.json.output }}",
+                        "Note": "={{ $('Update GG Doc').item.json.documentId }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "ID",
+                            "displayName": "ID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Task Type",
+                            "displayName": "Task Type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Result",
+                            "displayName": "Result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Note",
+                            "displayName": "Note",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.5,
+            "position": [
+                176,
+                544
+            ],
+            "id": "e7b7e16c-0134-46fd-8c58-498fd6b53893",
+            "name": "Update sheet",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "MrmPbaOd6JuX0F4J",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "sendPhoto",
+                "chatId": "={{ $('When Executed by Another Workflow').item.json.chatID }}",
+                "binaryData": true,
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                64,
+                192
+            ],
+            "id": "1b8d5489-0799-4d66-87b0-2043c4019d65",
+            "name": "Send Photo1",
+            "webhookId": "8fcbda9c-8396-41f7-8f2d-39e4ae4337c7",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-3.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                -1600,
+                592
+            ],
+            "id": "293c7741-b8ef-442b-aee9-dcb92aa61ede",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "1WMVWeWDmlVXsLAJ",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "descriptionType": "manual",
+                "toolDescription": "Message a model in Google Gemini",
+                "modelId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "models/gemini-3-flash-preview"
+                },
+                "messages": {
+                    "values": [
+                        {}
+                    ]
+                },
+                "builtInTools": {},
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+            "typeVersion": 1.2,
+            "position": [
+                -1456,
+                592
+            ],
+            "id": "39164f1d-9cfd-4395-a51d-414d31b1d566",
+            "name": "Google Search",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "1WMVWeWDmlVXsLAJ",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "toBinary",
+                "sourceProperty": "predictions[0].bytesBase64Encoded",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                -448,
+                288
+            ],
+            "id": "24ef3497-7004-48bb-acfa-9215abe03f9e",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"instances\": [\n    {\n      \"prompt\": {{ JSON.stringify($('When Executed by Another Workflow').item.json.Product_detail) }}\n    }\n  ],\n  \"parameters\": {\n    \"sampleCount\": 1\n  }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -688,
+                288
+            ],
+            "id": "4eca8f5c-e819-4f22-9479-28e9b299669c",
+            "name": "Generate Image"
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Blog Post Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Blog Post Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Google Docs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Docs": {
+            "main": [
+                [
+                    {
+                        "node": "Update GG Doc",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update GG Doc": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Think": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "Blog Post Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Photo1": {
+            "main": [
+                [
+                    {
+                        "node": "Send Blog",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Blog Post Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Search": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "Blog Post Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Update sheet",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Send Photo1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Image": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "versionId": "01e99164-7b10-4779-99ec-76590a62e97b",
+    "meta": {
+        "instanceId": "d28dce04d14105a64d685c9dbc67db247f417436be8530e966601ef9b0f25772"
+    },
+    "id": "fgXzfbrOVPkEKDlG",
+    "tags": [
+        {
+            "updatedAt": "2026-07-10T07:36:40.917Z",
+            "createdAt": "2026-07-10T07:36:40.917Z",
+            "id": "N2VV1dcbI0BSHW5K",
+            "name": "marketing-automation"
+        }
+    ]
+}

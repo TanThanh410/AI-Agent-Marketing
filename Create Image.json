@@ -1,0 +1,464 @@
+{
+    "name": "Create Image",
+    "nodes": [
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.user_brief }}",
+                "options": {
+                    "systemMessage": "=# Overview\nYou are an expert image prompt engineer. Take the user\"s brief and expand it into a highly detailed and effective prompt for a text-to-image generation model like Flux, Gemini image model or midjourney. Describe the main subject, background, style, mood, lighting, composition, and any specific details. Output only the refined prompt.\n\n## Prompt Instructions\nYour detailed prompt must clearly describe the following:\n1) Main Subject: What is the primary focus of the image?\n2) Background/Setting: What is happening in the background or environment?\n3) Style: Specify the visual style (e.g., hyper-realistic, digital painting, watercolor, anime, 3D render, etc.).\n4) Mood/Lighting: Describe the emotional tone and lighting (e.g., soft warm sunset, moody storm clouds, futuristic neon lights).\n5) Additional Details: Mention any specific objects, clothing, colors, textures, or notable features that should appear.\n\n## Output Format\n- Begin with a clean, natural-sounding descriptive prompt that integrates all of the above elements seamlessly.\n- The description should sound like it’s written specifically for an AI to generate a professional, high-quality image.\n- Avoid repeating the original topic verbatim — instead, reframe it into a vivid scene or visual concept.\n- Use rich, vivid language and imagery.\n\n## note:\nAuthentic Vietnamese people, Vietnamese facial features, Vietnamese professionals, located in Vietnam"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.9,
+            "position": [
+                -752,
+                224
+            ],
+            "id": "60535e70-27fb-45ea-9690-1c1e29f02c6b",
+            "name": "Image Prompt"
+        },
+        {
+            "parameters": {
+                "name": "={{ $('Execute Workflow Trigger').item.json.imageTitle }}.png",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "folderId": {
+                    "__rl": true,
+                    "value": "11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r",
+                    "mode": "list",
+                    "cachedResultName": "MARKETING AGENT IMAGES",
+                    "cachedResultUrl": "https://drive.google.com/drive/folders/11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                64,
+                432
+            ],
+            "id": "5590e404-b29a-4821-8e88-9b808566321c",
+            "name": "Google Drive",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk",
+                    "mode": "list",
+                    "cachedResultName": "Marketing Team Log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data_log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Tên Image": "={{ $json.name }}",
+                        "Link": "={{ $json.webViewLink }}",
+                        "Yêu cầu": "={{ $('Execute Workflow Trigger').item.json.user_brief }}",
+                        "Type": "New",
+                        "ID": "={{ $json.id }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "Tên Image",
+                            "displayName": "Tên Image",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Type",
+                            "displayName": "Type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Yêu cầu",
+                            "displayName": "Yêu cầu",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "ID",
+                            "displayName": "ID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Link",
+                            "displayName": "Link",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "post",
+                            "displayName": "post",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.5,
+            "position": [
+                304,
+                432
+            ],
+            "id": "37ce837c-7a3e-4f5c-b69a-d066ecc178a9",
+            "name": "Image Log",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "MrmPbaOd6JuX0F4J",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "# Image Prompt\n",
+                "height": 240,
+                "width": 360,
+                "color": 3
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -816,
+                144
+            ],
+            "id": "5ab91fae-8933-4054-9228-3d9872f08a86",
+            "name": "Sticky Note4"
+        },
+        {
+            "parameters": {
+                "content": "## Model",
+                "height": 180,
+                "color": 7
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1056,
+                432
+            ],
+            "id": "7d998f9a-01ad-4cf9-af74-6b2cb965d8a7",
+            "name": "Sticky Note2"
+        },
+        {
+            "parameters": {
+                "content": "# Trigger\n",
+                "height": 240,
+                "width": 260,
+                "color": 7
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1136,
+                144
+            ],
+            "id": "4932f50f-a2bd-471f-8aa7-fa162b04dc53",
+            "name": "Sticky Note5",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "content": "# Generate Image\n",
+                "height": 240,
+                "width": 400,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -432,
+                144
+            ],
+            "id": "4caa8ba9-52eb-48c0-95ef-819ee0ee897c",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "content": "# Send Content",
+                "height": 240,
+                "width": 300,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "5a609611-09ef-4a86-9ceb-07f3b5d71dff",
+            "name": "Sticky Note7"
+        },
+        {
+            "parameters": {
+                "content": "# Write to Drive & Sheets",
+                "height": 240,
+                "width": 540,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                0,
+                352
+            ],
+            "id": "92286ca5-d13b-4f73-9c25-2eb6e884f595",
+            "name": "Sticky Note6"
+        },
+        {
+            "parameters": {
+                "operation": "sendPhoto",
+                "chatId": "={{ $('Execute Workflow Trigger').item.json.chatID }}",
+                "binaryData": true,
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                112,
+                80
+            ],
+            "id": "5debf12b-a77a-4086-8d7e-f6bff9c6af28",
+            "name": "Send Photo",
+            "webhookId": "8fcbda9c-8396-41f7-8f2d-39e4ae4337c7",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "imageTitle"
+                        },
+                        {
+                            "name": "user_brief"
+                        },
+                        {
+                            "name": "chatID"
+                        }
+                    ]
+                }
+            },
+            "id": "55cebe38-565b-46cf-a231-bd5d4d1e68d1",
+            "name": "Execute Workflow Trigger",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1104,
+                224
+            ]
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                -976,
+                480
+            ],
+            "id": "abb810ae-07a9-45c2-93ad-5f023f363798",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "1WMVWeWDmlVXsLAJ",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"instances\": [\n    {\n      \"prompt\": {{ JSON.stringify($json.output) }}\n    }\n  ],\n  \"parameters\": {\n    \"sampleCount\": 1\n  }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -368,
+                224
+            ],
+            "id": "a3475e08-5774-4325-9ed3-561bda1c0a08",
+            "name": "Generate Image1"
+        },
+        {
+            "parameters": {
+                "operation": "toBinary",
+                "sourceProperty": "predictions[0].bytesBase64Encoded",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                -176,
+                224
+            ],
+            "id": "194c2a48-e773-4e7f-93e8-9661089c2250",
+            "name": "Convert to file"
+        }
+    ],
+    "pinData": {
+        "Execute Workflow Trigger": [
+            {
+                "json": {
+                    "imageTitle": "Hội thảo khoa học pháp lý",
+                    "user_brief": "Các chuyên gia, nhà nghiên cứu pháp luật Việt Nam đang tham gia hội thảo khoa học, thảo luận về hoàn thiện hệ thống pháp luật và chính sách công. Khán phòng hiện đại, màn hình trình chiếu dữ liệu nghiên cứu, không khí học thuật chuyên nghiệp và trang trọng.",
+                    "chatID": 8472132121
+                }
+            }
+        ]
+    },
+    "connections": {
+        "Image Prompt": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Image1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Drive": {
+            "main": [
+                [
+                    {
+                        "node": "Image Log",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Image Prompt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Image Prompt",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Image1": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to file": {
+            "main": [
+                [
+                    {
+                        "node": "Send Photo",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Google Drive",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "versionId": "31de411a-6edf-43df-b58e-84a4a2ca16d4",
+    "meta": {
+        "instanceId": "d28dce04d14105a64d685c9dbc67db247f417436be8530e966601ef9b0f25772"
+    },
+    "id": "jMEG4mDvqCqMNJ4y",
+    "tags": [
+        {
+            "updatedAt": "2026-07-10T07:36:40.917Z",
+            "createdAt": "2026-07-10T07:36:40.917Z",
+            "id": "N2VV1dcbI0BSHW5K",
+            "name": "marketing-automation"
+        }
+    ]
+}

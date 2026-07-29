@@ -1,0 +1,671 @@
+{
+    "name": "blog post",
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "blogTopic"
+                        },
+                        {
+                            "name": "target_audience"
+                        },
+                        {
+                            "name": "chatID"
+                        },
+                        {
+                            "name": "Note_For_Research"
+                        }
+                    ]
+                }
+            },
+            "id": "cfd501df-9542-48d9-bc1e-096c0012507f",
+            "name": "Execute Workflow Trigger",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "chatId": "={{ $('Execute Workflow Trigger').item.json.chatID }}",
+                "text": "=1. Blog Title: \"{{ $('Content Writer & Onpage').item.json.output.split(\"\\n\")[0].replace(\"# \", \"\") || $json.topic }}\".\n\n2. <a href=\"https://docs.google.com/document/d/{{ $('Update GG Doc').item.json.documentId }}/edit?usp=sharing\"> Blog content - file doc </a> \n",
+                "additionalFields": {
+                    "parse_mode": "HTML"
+                }
+            },
+            "id": "988d5094-e943-4062-83ac-1e97651522cd",
+            "name": "Notify Reviewer (Telegram)",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                1520,
+                464
+            ],
+            "webhookId": "ba7156ba-100d-4b99-a912-6b8ab91b2a38",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/interactions",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        },
+                        {
+                            "name": "Api-Revision",
+                            "value": "2026-05-20"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"model\": \"gemini-3.5-flash\",\n  \"input\": \"{{ $json.Note_For_Research }}\",\n  \"tools\": [\n    {\n      \"type\": \"google_search\"\n    }\n  ]\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                272,
+                0
+            ],
+            "id": "71a2ecd0-28ba-4b14-be3e-7b5bbad8c4ea",
+            "name": "Search Intent analyze",
+            "disabled": true
+        },
+        {
+            "parameters": {},
+            "type": "@n8n/n8n-nodes-langchain.toolThink",
+            "typeVersion": 1,
+            "position": [
+                784,
+                224
+            ],
+            "id": "956bcc82-e916-4d49-8487-ae97d738e229",
+            "name": "Think"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Dựa trên phần knowledge được cung cấp, hãy viết một nội dung để đăng trên website Viện Khoa Học Công Nghệ và Pháp Luật (ISTAL) với các thông tin bên dưới.\n\n### [theme: {{ $('Execute Workflow Trigger').item.json.blogTopic }}] [audience: {{ $('Execute Workflow Trigger').item.json.target_audience }}] [format: blogpost]  [length: 1500 - 2000 words] \n\nViết bằng tiếng Việt. \n\n[final reminder]:\n\n1. Ưu tiên viết content ở dạng paragraph format, nếu dùng list hoặc table format, content phải ổn về contextual flow, contextual coverage. Có flow nội dung rành mạch, rõ ràng, tự nhiên cho người đọc.\n2. Output in Vietnamese. Use Vietnamese grammar and language.",
+                "options": {
+                    "systemMessage": "=[knowledge]:\nNếu sử dụng công cụ tìm kiếm, hãy ưu tiên thu thập số liệu, case study thực tế từ các nguồn uy tín (ví dụ: McKinsey, Gartner, TechCrunch, Hubspot). Tuyệt đối không sao chép nguyên văn, chỉ lấy dữ liệu cốt lõi để tự diễn đạt lại.\n\n[Role]:\nSEO & Content creation Professional with 10 years of experience.  Bạn cũng chuyên về lĩnh vực AI và là writer cho thương hiệu The AI Growth (TAG).\n\n[Tools]:\n1. Google_HelpFul_Content: Use this tool to retrieve the full requirements of Google on how to create the content that is good. **Call this tool without any input parameters.**\n2. Think: Use the tool before generating the final response/content/output, in order to think about the guidlines, checklist the approach  final output will try its best meet the standard of Google_HelpFul_Content.\n\n[style of writing]:\nWrite in a style that is authoritative, educational, and friendly. Use a conversational tone to explain technical concepts simply. Keep sentences concise (10-20 words), with short paragraphs (2-3 sentences). Engage readers by asking questions and including practical examples or data. Use clear headings and bullet points to improve readability. Include relatable analogies and business-use cases to make complex ideas tangible. Write as if you are speaking directly to a curious learner, guiding them through the topic step by step.\n\n[reminder]:\nToday is {{ $now }}\n\n[output example]:\nHãy xuất kết quả theo cấu trúc định dạng Markdown sau đây:\n\n# [Tiêu đề bài blog hấp dẫn, chứa từ khóa chính]\n\n## [Thẻ H2 - Giới thiệu vấn đề hoặc Khái niệm]\n[Đoạn văn ngắn 2-3 câu, giải thích đơn giản, có câu hỏi tương tác]\n\n## [Thẻ H2 - Giải pháp hoặc nội dung cốt lõi 1]\n[Đoạn văn ngắn dẫn dắt]\n* **Ý chính 1:** [Giải thích ngắn gọn kèm ví dụ thực tế]\n* **Ý chính 2:** [Giải thích ngắn gọn kèm số liệu hoặc case study]\n\n> [Một đoạn Blockquote làm nổi bật lời khuyên hoặc trích dẫn quan trọng]\n\n## [Thẻ H2 - Kết luận & Kêu gọi hành động (CTA)]\n[Tóm tắt lại lợi ích và đưa ra câu hỏi kết thúc để độc giả tương tác]\n"
+                }
+            },
+            "id": "767a31ab-50e2-4069-bb13-a12a0e0854c5",
+            "name": "Content Writer & Onpage",
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.7,
+            "position": [
+                560,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "folderId": "1hgJk1mNqyYuM6wPriOrUjLwKPiJ0fYHu",
+                "title": "={{ $('Execute Workflow Trigger').item.json.blogTopic }} - Content detail"
+            },
+            "type": "n8n-nodes-base.googleDocs",
+            "typeVersion": 2,
+            "position": [
+                976,
+                0
+            ],
+            "id": "00d31b26-c6d6-484c-b915-0d5110ee9b6c",
+            "name": "Google Docs",
+            "credentials": {
+                "googleDocsOAuth2Api": {
+                    "id": "i9btxmfAwBRvnB1N",
+                    "name": "Google Docs account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentURL": "={{ $json.id }}",
+                "actionsUi": {
+                    "actionFields": [
+                        {
+                            "action": "insert",
+                            "text": "={{ $('Content Writer & Onpage').item.json.output }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.googleDocs",
+            "typeVersion": 2,
+            "position": [
+                1248,
+                0
+            ],
+            "id": "434ae957-c424-4138-b090-50bacdbbecce",
+            "name": "Update GG Doc",
+            "credentials": {
+                "googleDocsOAuth2Api": {
+                    "id": "i9btxmfAwBRvnB1N",
+                    "name": "Google Docs account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "get",
+                "documentURL": "1Q3QIfMVcY0GeSCCuomPV2NwxX0ui2NHyi_eNWWGpK2w",
+                "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.googleDocsTool",
+            "typeVersion": 2,
+            "position": [
+                640,
+                224
+            ],
+            "id": "7cbb253f-2d53-47d5-b299-be0cf0a5002a",
+            "name": "Google_HelpFul_Content",
+            "credentials": {
+                "googleDocsOAuth2Api": {
+                    "id": "i9btxmfAwBRvnB1N",
+                    "name": "Google Docs account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "## Structured Output",
+                "height": 240,
+                "width": 272,
+                "color": 7
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                48,
+                560
+            ],
+            "id": "5213614d-1a51-4f5e-a129-0aa91a332299",
+            "name": "Sticky Note8"
+        },
+        {
+            "parameters": {
+                "content": "# Write to Drive & Sheets",
+                "height": 240,
+                "width": 608,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                1136,
+                704
+            ],
+            "id": "13c5a971-4545-49bc-b60d-d75af8f618b9",
+            "name": "Sticky Note9"
+        },
+        {
+            "parameters": {
+                "content": "# Send Content",
+                "height": 240,
+                "width": 608,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                1136,
+                400
+            ],
+            "id": "43d5bfc5-dd13-415e-bff7-665b856196e5",
+            "name": "Sticky Note10"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Blog Post: [\n{{ $('Content Writer & Onpage').item.json.output }} ]",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "=# Overview\nYou are an AI agent that transforms blog posts into visual prompt descriptions for generating graphic marketing materials. These visuals are designed to be paired with the post, helping communicate the message in a visually engaging, brand-aligned way.\n\n## Objective:\n- Read and analyze the given blog post.\n- Identify the main message, insight, or takeaway from the post.\n- Create a clear and compelling graphic prompt that can be used with a text-to-image generator.\n- The result should be a marketing-style graphic — not a literal scene or hyperrealistic photo — that:\n1) Visually supports or illustrates the key idea of the post\n2) Looks appropriate for use in a professional LinkedIn feed\n3) Feels polished, modern, and engaging\n\n## Output Instructions:\n- Output two fields: \n1) title (2-4 words) \n2) prompt\n- Output only the final image prompt. Do not output quotation marks.\n- Do not repeat or rephrase the blog post.\n- Do not add any explanations or extra content — just the image prompt.\n- Never leave things blank like \"Header area reserved for customizable callout text\"\n- Output numeric stats when available in the original post\n3) Image alway is Viet Name language\n\n## Style Guidelines:\n- Think like a brand designer or marketing creative.\n- Visuals may include: text, charts, icons, abstract shapes, overlays, modern illustrations, motion-like effects, bold typography elements (described, not rendered), or metaphorical concepts.\n- You can mention layout suggestions (e.g., \"split screen design,\" \"header with bold title and subtle background illustration\").\n- Assume the output will be generated using AI image tools — your prompt should guide those tools effectively.\n\n## Example Prompt Format:\nA modern flat-style graphic showing a human brain connected to mechanical gears, representing the fusion of AI and automation. Minimalist background, soft gradients, clean sans-serif text placement space at the top.\n\n## note:\n- Authentic Vietnamese people, Vietnamese facial features, Vietnamese professionals, located in Vietnam\n\n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.9,
+            "position": [
+                -112,
+                352
+            ],
+            "id": "4c23084d-a3b9-4c51-a931-17449a2cf3e6",
+            "name": "Image Prompt Agent"
+        },
+        {
+            "parameters": {
+                "operation": "sendPhoto",
+                "chatId": "={{ $('Execute Workflow Trigger').item.json.chatID }}",
+                "binaryData": true,
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                1280,
+                464
+            ],
+            "id": "43da651f-1557-4f9a-bbfb-24c872d218bb",
+            "name": "Send Photo",
+            "webhookId": "8fcbda9c-8396-41f7-8f2d-39e4ae4337c7",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "name": "={{ $('Image Prompt Agent').item.json.output.title }}.png",
+                "driveId": {
+                    "__rl": true,
+                    "value": "My Drive",
+                    "mode": "list",
+                    "cachedResultName": "My Drive",
+                    "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+                },
+                "folderId": {
+                    "__rl": true,
+                    "value": "11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r",
+                    "mode": "list",
+                    "cachedResultName": "MARKETING AGENT IMAGES",
+                    "cachedResultUrl": "https://drive.google.com/drive/folders/11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                1280,
+                768
+            ],
+            "id": "f926e2bc-7f9e-4b17-80b8-e5b841b48bfe",
+            "name": "Upload",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n  \"title\": \"<2-4 word creative title for the image>\",\n  \"prompt\": \"<full detailed image generation prompt>\"\n}\n"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                144,
+                656
+            ],
+            "id": "28fb585e-8173-4a31-866e-c0e1bb55be07",
+            "name": "Image & Title"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk",
+                    "mode": "list",
+                    "cachedResultName": "Marketing Team Log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1271146410,
+                    "mode": "list",
+                    "cachedResultName": "blog_log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit#gid=1271146410"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "stt": "=",
+                        "Content link": "=https://docs.google.com/document/d/{{ $('Update GG Doc').item.json.documentId }}/edit?usp=sharing",
+                        "Title of the blog": "={{ $('Execute Workflow Trigger').item.json.blogTopic }}",
+                        "Drive image link": "={{ $json.webViewLink }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "stt",
+                            "displayName": "stt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Title of the blog",
+                            "displayName": "Title of the blog",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Content link",
+                            "displayName": "Content link",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Drive image link",
+                            "displayName": "Drive image link",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.5,
+            "position": [
+                1488,
+                768
+            ],
+            "id": "687c8eee-2e97-43c7-826c-e9ab6fbf3c46",
+            "name": "Image Log",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "MrmPbaOd6JuX0F4J",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"instances\": [\n    {\n      \"prompt\": {{ JSON.stringify($json.output.prompt) }}\n    }\n  ],\n  \"parameters\": {\n    \"sampleCount\": 1\n  }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                528,
+                608
+            ],
+            "id": "d39cc0e5-e4d2-4517-b7e9-95343ae33013",
+            "name": "Generate Image1"
+        },
+        {
+            "parameters": {
+                "operation": "toBinary",
+                "sourceProperty": "predictions[0].bytesBase64Encoded",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                720,
+                608
+            ],
+            "id": "1fd612f9-9aed-4fcc-a41b-6088f559c022",
+            "name": "Convert to file"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-pro",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                480,
+                224
+            ],
+            "id": "0ea60f45-144c-408a-b8bc-fc1842417544",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "1WMVWeWDmlVXsLAJ",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        }
+    ],
+    "pinData": {
+        "Execute Workflow Trigger": [
+            {
+                "json": {
+                    "blogTopic": "Giải pháp Agent kiểm soát sản xuất: Đột phá công nghệ tối ưu hóa quy trình và đảm bảo tuân thủ cho doanh nghiệp sản xuất",
+                    "target_audience": "Chủ doanh nghiệp, giám đốc sản xuất, quản lý chất lượng, chuyên gia công nghệ và các tổ chức đang tìm kiếm giải pháp chuyển đổi số và tuân thủ tiêu chuẩn trong sản xuất tại Việt Nam.",
+                    "chatID": 7019704958,
+                    "Note_For_Research": "Research about 'Agent kiểm soát sản xuất' (Production Control AI Agent), its key functionalities in manufacturing (real-time monitoring, quality control, predictive maintenance, compliance tracking), its application in Vietnam's manufacturing sector, and how it aligns with ISTAL's mission of combining technology, law, and standards."
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
+        ]
+    },
+    "connections": {
+        "Execute Workflow Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Search Intent analyze",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Think": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "Content Writer & Onpage",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Search Intent analyze": {
+            "main": [
+                [
+                    {
+                        "node": "Content Writer & Onpage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Docs": {
+            "main": [
+                [
+                    {
+                        "node": "Update GG Doc",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update GG Doc": {
+            "main": [
+                [
+                    {
+                        "node": "Image Prompt Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Content Writer & Onpage": {
+            "main": [
+                [
+                    {
+                        "node": "Google Docs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google_HelpFul_Content": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "Content Writer & Onpage",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Image Prompt Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Image1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Photo": {
+            "main": [
+                [
+                    {
+                        "node": "Notify Reviewer (Telegram)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload": {
+            "main": [
+                [
+                    {
+                        "node": "Image Log",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Image & Title": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "Image Prompt Agent",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Image1": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to file": {
+            "main": [
+                [
+                    {
+                        "node": "Send Photo",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Upload",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Image Prompt Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    },
+                    {
+                        "node": "Content Writer & Onpage",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": true,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "versionId": "1479c2fd-19e8-498e-a2e3-cb3d6ec4c3e8",
+    "meta": {
+        "instanceId": "d28dce04d14105a64d685c9dbc67db247f417436be8530e966601ef9b0f25772"
+    },
+    "id": "SYEKTOks59RcEdP1",
+    "tags": [
+        {
+            "updatedAt": "2026-07-10T07:36:40.917Z",
+            "createdAt": "2026-07-10T07:36:40.917Z",
+            "id": "N2VV1dcbI0BSHW5K",
+            "name": "marketing-automation"
+        }
+    ]
+}

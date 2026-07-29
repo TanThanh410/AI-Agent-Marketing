@@ -1,0 +1,684 @@
+{
+    "name": "video faceless",
+    "nodes": [
+        {
+            "parameters": {
+                "operation": "sendVideo",
+                "chatId": "={{ $('When Executed by Another Workflow').item.json.chatID }}",
+                "binaryData": true,
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                592,
+                256
+            ],
+            "id": "555824db-4532-4b54-9834-73f7bef9f741",
+            "name": "Send Video",
+            "webhookId": "cdeb2987-d275-480b-8532-f69bbed64999",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1QFsu63sPEgwBzZY0wPE-jluWL3Vz6wZLkEh7sA6es8k",
+                    "mode": "list",
+                    "cachedResultName": "Workflow Automation n8n - Content Marketing All",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QFsu63sPEgwBzZY0wPE-jluWL3Vz6wZLkEh7sA6es8k/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1073486153,
+                    "mode": "list",
+                    "cachedResultName": "POV video",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QFsu63sPEgwBzZY0wPE-jluWL3Vz6wZLkEh7sA6es8k/edit#gid=1073486153"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Final_Output": "={{ $('Download Video').item.json.url }}",
+                        "Status Publishing": "for publishing",
+                        "Idea": "={{ $('Google Sheets').item.json.Idea }}"
+                    },
+                    "matchingColumns": [
+                        "Idea"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Idea",
+                            "displayName": "Idea",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Caption",
+                            "displayName": "Caption",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Production",
+                            "displayName": "Production",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Environment_Prompt",
+                            "displayName": "Environment_Prompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Status Publishing",
+                            "displayName": "Status Publishing",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Final_Output",
+                            "displayName": "Final_Output",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.5,
+            "position": [
+                272,
+                464
+            ],
+            "id": "5480ff0c-0dd7-4ec5-ba4a-3f1c07d57f5e",
+            "name": "Log Video",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "MrmPbaOd6JuX0F4J",
+                    "name": "Google Sheets account"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "amount": 2,
+                "unit": "minutes"
+            },
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1.1,
+            "position": [
+                -672,
+                256
+            ],
+            "id": "5463c995-e3e5-4573-9057-a9f57fa56b11",
+            "name": "Wait1",
+            "webhookId": "e8a2b29e-7051-479d-a2dc-a7368be4de9a"
+        },
+        {
+            "parameters": {
+                "content": "## Combine & Render video\n",
+                "height": 448,
+                "width": 964,
+                "color": 3
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                112,
+                176
+            ],
+            "id": "30c98f7b-778f-481a-baaf-7ea844f72228",
+            "name": "Sticky Note7"
+        },
+        {
+            "parameters": {
+                "content": "## Tạo Videos\n",
+                "height": 220,
+                "width": 1012,
+                "color": 4
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -992,
+                208
+            ],
+            "id": "667ca38c-97a5-4bae-b099-e86f3b5420c4",
+            "name": "Sticky Note10"
+        },
+        {
+            "parameters": {
+                "content": "## Video Ideas & Brief\n",
+                "height": 500,
+                "width": 1084
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -2144,
+                160
+            ],
+            "id": "db66bc96-a7bd-4a00-88ea-33dfba621673",
+            "name": "Sticky Note11"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "videoTopic"
+                        },
+                        {
+                            "name": "chatID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1984,
+                256
+            ],
+            "id": "523d118d-4899-470f-bdcb-19e9826c5991",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n  \"title\": \"string\",\n  \"hook\": \"string\",\n  \"scene_1\": \"string\",\n  \"scene_2\": \"string\",\n  \"scene_3\": \"string\",\n  \"veo_prompt\": \"string\",\n  \"thumbnail_prompt\": \"string\"\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                -1616,
+                496
+            ],
+            "id": "d71c6692-c7df-463e-9552-c6dd7c484a34",
+            "name": "3 part"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-pro",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                -1888,
+                496
+            ],
+            "id": "769c2e69-3503-4502-85eb-b1d2d7abce2e",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "1WMVWeWDmlVXsLAJ",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Give me an idea for p[ {{ $('When Executed by Another Workflow').item.json.videoTopic }} ]",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "=You are creating a cinematic viral short video.\n\nIMPORTANT:\nDo NOT generate any text, letters, words, logos, signs, captions, or readable typography inside the video.\nAll text will be added later in post-production.\nKeep clean dark areas suitable for overlay.\n\nScene 1 (0-3s):\nClose-up cinematic shot of an old law book opening slowly on a wooden desk.\nDust particles floating in warm golden light.\nCamera slowly pushes forward.\nMood: mysterious, professional, intellectual.\nLeave empty space in the center for future text overlay.\n\nScene 2 (3-7s):\nBeat drop transition.\nFast cinematic montage:\nA drone flies above a modern law institute building with glass architecture.\nCamera sweeps through a premium legal library.\nLaw professionals in formal suits discuss around a futuristic meeting table.\nSmooth gimbal movement.\nNo visible signs or text anywhere.\n\nScene 3 (7-12s):\nClose-up of a legal expert's eyes reflecting abstract digital data.\nCamera pulls back revealing the expert standing confidently in front of a city skyline at night.\nCinematic blue lighting.\nLeave clean empty space for logo placement later.\n\nStyle:\nUltra realistic documentary film.\nHollywood cinematic lighting.\n4K.\nVertical 9:16.\nProfessional commercial quality.\nNo text generation.\nNo logos.\nNo letters."
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.9,
+            "position": [
+                -1808,
+                256
+            ],
+            "id": "5715a9e0-4463-44d6-9a62-ca08304010d3",
+            "name": "Create Prompt Video"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-generate-preview:predictLongRunning",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"instances\": [\n    {\n      \"prompt\": {{ JSON.stringify($json.prompt) }}\n    }\n  ]\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -864,
+                256
+            ],
+            "id": "9809e005-8a00-4ecb-814c-dc72f5594931",
+            "name": "Create Video Veo 3.1 Model"
+        },
+        {
+            "parameters": {
+                "jsCode": "const o = $json.output;\n\nreturn [{\n  prompt: `\nTitle: ${o.title}\n\nScene 1:\n${o.scene_1}\n\nScene 2:\n${o.scene_2}\n\nScene 3:\n${o.scene_3}\n\nStyle:\nUltra realistic documentary,\ncinematic lighting,\nsmooth camera movement,\n4K,\nvertical 9:16,\nnatural colors,\nprofessional filmmaking.\n`\n}];"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -1360,
+                256
+            ],
+            "id": "7d8ee92d-f886-4baa-8d4d-b224816b5d33",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "url": "=https://generativelanguage.googleapis.com/v1beta/{{ $json.name }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -432,
+                256
+            ],
+            "id": "173fe802-f007-48b0-8ec8-80ad2cdeb257",
+            "name": "get video"
+        },
+        {
+            "parameters": {
+                "modelId": {
+                    "__rl": true,
+                    "value": "models/gemini-2.5-pro",
+                    "mode": "list",
+                    "cachedResultName": "models/gemini-2.5-pro"
+                },
+                "messages": {
+                    "values": [
+                        {
+                            "content": "=Video: {{ $('When Executed by Another Workflow').first().json.videoTopic }}"
+                        },
+                        {
+                            "content": "Create a 3-4 word title for the given video",
+                            "role": "model"
+                        }
+                    ]
+                },
+                "builtInTools": {},
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.googleGemini",
+            "typeVersion": 1.2,
+            "position": [
+                784,
+                256
+            ],
+            "id": "1f3d03be-9cb7-429a-a1fd-2817f1f9077a",
+            "name": "Message a model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "1WMVWeWDmlVXsLAJ",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.response.generateVideoResponse.generatedSamples[0].video.uri }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                -224,
+                256
+            ],
+            "id": "5faf7a2f-341d-4348-bec1-7a4073c8f8fa",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "folderId": {
+                    "__rl": true,
+                    "value": "1ibKvNEWOqPt8z_t-LiGY0WG80tvoYhZa",
+                    "mode": "list",
+                    "cachedResultName": "MARKETING AGENT VIDEO",
+                    "cachedResultUrl": "https://drive.google.com/drive/folders/1ibKvNEWOqPt8z_t-LiGY0WG80tvoYhZa"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                0,
+                0
+            ],
+            "id": "4e17da62-68de-48cf-b923-d96c63636bb8",
+            "name": "Upload file",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "fileId": {
+                    "__rl": true,
+                    "value": "={{ $json.id }}",
+                    "mode": "id"
+                },
+                "newUpdatedFileName": "={{ $('Create Prompt Video').item.json.output.title }}.mp4",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                160,
+                256
+            ],
+            "id": "54b95527-da97-44bb-9ec0-94ba4d7284c7",
+            "name": "Edit file mp4",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "download",
+                "fileId": {
+                    "__rl": true,
+                    "value": "={{ $json.id }}",
+                    "mode": "id"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                368,
+                256
+            ],
+            "id": "06df7488-f517-40dc-a08d-e2ff5a2f515d",
+            "name": "Download file",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        }
+    ],
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "videoTopic": "Một văn phòng luật tương lai vào năm 2030",
+                    "chatID": 8472132121
+                }
+            }
+        ]
+    },
+    "connections": {
+        "Send Video": {
+            "main": [
+                [
+                    {
+                        "node": "Message a model",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait1": {
+            "main": [
+                [
+                    {
+                        "node": "get video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Create Prompt Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "3 part": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "Create Prompt Video",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Create Prompt Video",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Prompt Video": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Video Veo 3.1 Model": {
+            "main": [
+                [
+                    {
+                        "node": "Wait1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Create Video Veo 3.1 Model",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "get video": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Message a model": {
+            "main": [
+                [
+                    {
+                        "node": "Log Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Upload file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload file": {
+            "main": [
+                [
+                    {
+                        "node": "Edit file mp4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit file mp4": {
+            "main": [
+                [
+                    {
+                        "node": "Download file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download file": {
+            "main": [
+                [
+                    {
+                        "node": "Send Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "versionId": "e4152c10-d16b-4a81-a6f6-c75b1ad1090a",
+    "meta": {
+        "instanceId": "d28dce04d14105a64d685c9dbc67db247f417436be8530e966601ef9b0f25772"
+    },
+    "id": "fQM1wkXylI4AzZWR",
+    "tags": [
+        {
+            "updatedAt": "2026-07-10T07:36:40.917Z",
+            "createdAt": "2026-07-10T07:36:40.917Z",
+            "id": "N2VV1dcbI0BSHW5K",
+            "name": "marketing-automation"
+        }
+    ]
+}

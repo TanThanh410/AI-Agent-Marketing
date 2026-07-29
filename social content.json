@@ -1,0 +1,696 @@
+{
+    "name": "social content",
+    "nodes": [
+        {
+            "parameters": {
+                "name": "={{ $('Execute Workflow Trigger').item.json.topic }}",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "folderId": {
+                    "__rl": true,
+                    "value": "11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r",
+                    "mode": "list",
+                    "cachedResultName": "MARKETING AGENT IMAGES",
+                    "cachedResultUrl": "https://drive.google.com/drive/folders/11HiY5pOcopVNYmv58qQ4seG3mF4Zja1r"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                1184,
+                640
+            ],
+            "id": "c81eef46-668e-4e78-8423-288d5d3ac8aa",
+            "name": "Upload Image",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "toolDescription": "Use this tool to search the web. ",
+                "method": "POST",
+                "url": "https://api.tavily.com/search",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"query\": \"{searchTerm}\",\n  \"topic\": \"general\",\n  \"search_depth\": \"advanced\",\n  \"chunks_per_source\": 5,\n  \"max_results\": 1,\n  \"time_range\": null,\n  \"include_answer\": \"advanced\",\n  \"include_answer\": true,\n  \"include_raw_content\": false,\n  \"include_images\": false,\n  \"include_image_descriptions\": false,\n  \"include_domains\": [\"thanhnien.vn\", \"tuoitre.vn\"]\n}",
+                "placeholderDefinitions": {
+                    "values": [
+                        {
+                            "name": "searchTerm",
+                            "description": "What the user is searching for. "
+                        }
+                    ]
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+            "typeVersion": 1.1,
+            "position": [
+                48,
+                384
+            ],
+            "id": "c3351d6b-c436-4f10-807b-13198c7f219c",
+            "name": "Tavily",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=[Context]:\n- Dựa trên chủ đề bài: \"{{ $('Execute Workflow Trigger').item.json.topic }}\"\n- Nội dung bài viết: [{{ $json.output }}]. \n\n[intruction]:\nHãy tạo một image prompt để tôi có thể bỏ vào Image AI Model để tạo ra ảnh minh họa sắc nét cho bài viết đăng trên facebook của tôi. Ảnh sắc nét - chi tiết và có những chữ hoặc logo để trong hình ảnh để minh họa tốt nhất.\n\nSize của bài facebook sẽ là 1024x1024\n\n[reminder]: \n- chữ trong hình chỉ chiếm tối đa 20% diện tích, vì vậy bố cục sao cho phù hợp các hình infographic hoặc hình ảnh viral, chuẩn kích thước của facebook.\n- Không nên có logo facebook hay linkedin. \n- Càng ít chữ nhưng vẫn truyền tải được thông điệp thì càng tốt.\n- Khi sử dụng chữ, nếu như chữ cùng một nội dung thì đừng hiển thị chung vào một hình, text trong hình ảnh ít và nếu bổ sung thì là các text bổ trợ nha. (Ví dụ: lợi ích của giấc ngủ là header text, các text con là: cải thiện trí nhớ, tăng mood,...)\n",
+                "options": {
+                    "systemMessage": "=# Overview\nYou are an advanced prompt-generation AI Agent that transforms Facebook/LinkedIn posts into visual prompt descriptions for generating graphic marketing materials. These visuals are designed to be paired with the post on LinkedIn, helping communicate the message in a visually engaging, brand-aligned way.\n\n## Objective:\n- Read and analyze the given  post.\n- Identify the main message, insight, or takeaway from the post.\n- Create a clear and compelling graphic prompt that can be used with a text-to-image generator.\n- The result should be a marketing-style graphic — not a literal scene or hyperrealistic photo — that:\n1) Visually supports or illustrates the key idea of the post\n2) Looks appropriate for use in a professional Facebook/LinkedIn feed\n3) Feels polished, modern, and engaging\n4) try to have statistic or text like infographic in the image\n\n## Output Instructions:\n- Output only the final image prompt. Do not output quotation marks.\n\n## Style Guidelines:\n- Think like a brand designer or marketing creative.\n- Infographic or image with insightful text is preferred but The text only maximum cover 20% of the image, less text but still convey the message is preferred.\n- The Color of brand mainly or colors that are similar(which are Start Color (Purple): `#850DBA` & End Color (Turquoise Blue): `#00CCFF`)\n- Theme: technology, futuristic.\n- Detailed guideline brief for the image AI model to generate.\n\n## note:\nAuthentic Vietnamese people, Vietnamese facial features, Vietnamese professionals, located in Vietnam, content Vietnamese, background Vietnamese."
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.9,
+            "position": [
+                784,
+                128
+            ],
+            "id": "04690b39-c893-4bb2-9a6a-f9665752375f",
+            "name": "Image Prompt Agent"
+        },
+        {
+            "parameters": {
+                "content": "# Generate Image\n",
+                "height": 520,
+                "width": 300,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                768,
+                336
+            ],
+            "id": "641ac23d-aca5-4021-9814-9f173a76a909",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "content": "# Image Prompt\n",
+                "height": 276,
+                "width": 440,
+                "color": 3
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                704,
+                32
+            ],
+            "id": "f1938382-6e33-4059-b3df-3fcddd851ded",
+            "name": "Sticky Note4"
+        },
+        {
+            "parameters": {},
+            "type": "@n8n/n8n-nodes-langchain.toolThink",
+            "typeVersion": 1,
+            "position": [
+                528,
+                384
+            ],
+            "id": "dd00846c-eaf5-459c-a0af-3a2452dc958a",
+            "name": "Think"
+        },
+        {
+            "parameters": {
+                "descriptionType": "manual",
+                "toolDescription": "Use This Tool to look for content examples that were used before in order to emulate the writing style & the tone of voice of the brand/author.",
+                "operation": "get",
+                "documentURL": "https://docs.google.com/document/d/18TJsY3zfKdRZYRjfTvIjmw1Ryt_F1jiNsiSv1TeOGEQ/edit?usp=drive_link"
+            },
+            "type": "n8n-nodes-base.googleDocsTool",
+            "typeVersion": 2,
+            "position": [
+                224,
+                384
+            ],
+            "id": "ff866448-26e0-43ed-9ccf-b4375fba3e70",
+            "name": "Content Examples",
+            "credentials": {
+                "googleDocsOAuth2Api": {
+                    "id": "i9btxmfAwBRvnB1N",
+                    "name": "Google Docs account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "share",
+                "fileId": {
+                    "__rl": true,
+                    "value": "={{ $json.id }}",
+                    "mode": "id"
+                },
+                "permissionsUi": {
+                    "permissionsValues": {
+                        "role": "writer",
+                        "type": "anyone",
+                        "allowFileDiscovery": true
+                    }
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                1392,
+                640
+            ],
+            "id": "590da735-413f-485b-947a-e69f60aeb993",
+            "name": "share quyền",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "VEw678DMkqbAhne3",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "# Content Generation\n\n",
+                "height": 560,
+                "width": 640,
+                "color": 6
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "414980cf-6dfc-4cff-8a15-4fa53b454cdb",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "topic"
+                        },
+                        {
+                            "name": "target_audience"
+                        },
+                        {
+                            "name": "chatID"
+                        },
+                        {
+                            "name": "Note_for_research"
+                        }
+                    ]
+                }
+            },
+            "id": "fcc84312-e17e-44a6-a3df-ee63d0fa5e75",
+            "name": "Execute Workflow Trigger",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -240,
+                128
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "sendPhoto",
+                "chatId": "={{ $('Execute Workflow Trigger').item.json.chatID }}",
+                "binaryData": true,
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                1184,
+                464
+            ],
+            "id": "8e5f1baf-23f3-4a86-ad9e-b1af5f08c394",
+            "name": "Send Photo",
+            "webhookId": "8fcbda9c-8396-41f7-8f2d-39e4ae4337c7",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=\n- Topic of Post: {{ $json.topic }}\n- Note for Researching: {{ $json.Note_for_research}}.\n- Viết bằng tiếng Việt.\n- Đưa những statistic, dữ liệu, fact vào trong bài.",
+                "options": {
+                    "systemMessage": "=# Overview\nYou are a professional content marketer with 10 years of knowledge.\n\nBased on the knowledge that is given, your task is to create engaging & informative content for the Facebook post of the brand. The content also needs to match the guideline/requirements that are given.\n\nYou need to read some of the examples of the content to emulate its writing style.\n\nYou are an AI agent specialized in creating professional, educational, and engaging social media posts (Facebook, Linkedin) based on any topic provided by the user.\n\n## Tools\n1. Tavily: Use this tool to search the latest, accurate & in-depth information about the user's topic request (limit to 2 researches only)\n2. Content Examples: Use this tool to retrieve content examples from the brand or author, in order to emulate their tone of voice and writing style.\n3. Think: Use this tool before generating the content (before the final step) to analyze the data and consider the approach to create the best content.\n\n## Brand information:\n- Target Audience: CEO, Managers, Digital Marketer, SEO-er.\n- Brand name: The AI Growth (or TAG)\n- Brand description: The AI Growth định vị là nền tảng tiên phong và đáng tin cậy tại Việt Nam, cung cấp các giải pháp AI và Automation để tiếp cận cho các doanh nghiệp SMEs, nhà quản lý marketing, và các nhà sáng tạo nội dung. The AI Growth mang đến kiến thức chuyên sâu, các công cụ hiện đại và ứng dụng thực tế, giúp khách hàng đạt được hiệu suất tối ưu trong hoạt động marketing, giảm chi phí, và mở rộng tăng trưởng nhanh chóng.\n- Brand image: Dành cho doanh nghiệp và marketer Việt Nam đang đối mặt với chi phí vận hành cao và hiệu quả marketing chưa tối ưu, The AI Growth là nền tảng đào tạo AI & Automation tiên phong mang đến giải pháp thực tiễn với cam kết hiệu quả trong 24 giờ thông qua phương châm 'Learning by Doing' - khác biệt với các khóa học marketing truyền thống chỉ cung cấp kiến thức lý thuyết.\n- Solution: Khóa học AI & Automation\n- Target market: Việt Nam\n## Objectives:\n\nAlways begin by conducting a real-time search using the Tavily tool to gather the most accurate, up-to-date information on the topic. After that, analyze the Content Examples to Emulate the writing style and the tone.\n\nThe post should be written to appeal to the provided target audience.\n\nBased on your research, generate a well-structured Facebook post that:\n1. Starts with an engaging, professional and emotional trigger hook (do not use hey, hi or hello at the beginning) \n - This hook will be the title of the post, so it should have emotional trigger and a line break between the content and the title.\n2. Sử dụng xưng hô \"mình\" và \"bạn\" hoặc \"TAG\" và \"bạn\".\n3. Sử dụng vài emoji cho bài facebook. (use only when highly relevant and minimal)\n4. Mô phỏng lại giọng văn đã được học ở trước.\n5. Bài viết nên đưa ra nhiều số liệu, statistic, facts hoặc case study càng nhiều càng tốt cho việc chứng minh luận điểm/luận cử. (nếu có).\n6. Cho 3 Hashtag liên quan cuối bài.\n7. Bài viết được chia thành nhiều đoạn nhỏ để tối ưu readability trên điện thoại.  \n8. Kết thúc với một CTA (e.g., asking for thoughts, feedback, or shares)Ends with a clear call to action (e.g., asking for thoughts, feedback, or shares)\n9. The content should be around 150 - 300 words. If the topic need to go to detailed, try explain it cleary.\n10. {speak conversational throughout} \n{Use Vietnamese language & grammar}{Add power words}\n\n## Output Instructions:\n- Your ONLY output should be the final Facebook/Linkedin post text without the markdown format (format text only)\n- Do not include explanations, notes, or anything beyond the post itself.\n\n## Example Workflow:\n1) Receive a topic (e.g., “The ROI of warehouse automation”)\n2) Use Tavily to search and gather recent information or case studies\n3) Retrieve the Content examples of the brand/author from \"Content Examples\" \n4) Analyze the Writing style, tone of voice and everything relate.\n5) Draft a Facebook/Linkedin post using all the information that you have garthered.\n6) Format it with source citations, clean structure, optional hashtags, a CTA and follow the content guidlines.\n\n## Example post:\nCHỦ SME ĐAU ĐẦU VÌ CHI PHÍ MARKETING? NUÔI KÊNH HOÀI NHƯNG LỢT ĐẸT KHÔNG AI XEM? 😟\nĐã đến lúc định hình lại cuộc chơi! Viện ISTAL đang thực nghiệm giải pháp Agent Marketing Tự Động Hóa – Trợ lý thông minh kỷ nguyên mới dành riêng cho doanh nghiệp Việt:\n🔹Quét xu hướng tự động: Tự động bắt trend, viết bài chuẩn SEO On-page giúp đẩy thứ hạng tự nhiên. \n🔹Video AI đa kênh: Tự động tạo video ngắn với giọng đọc tự nhiên, hình ảnh đồng bộ. Tự động lên lịch, chuyển đổi linh hoạt một bài viết chuyên sâu trên Website thành các định dạng ngắn gọn, phù hợp với hành vi người dùng trên các nền tảng MXH.\n🔹An toàn tuyệt đối: Tích hợp bộ lọc rà soát, né từ khóa cấm và định hướng phân luồng email phản hồi chính xác.\nGiải phóng con người khỏi các tác vụ lặp đi lặp lại để tập trung vào vai trò quản trị chiến lược cốt lõi!\n👉 NHẮN TIN NGAY cho chúng tôi để được tư vấn và đặt trước giải pháp tinh gọn nhất cho doanh nghiệp của bạn!\n----------------------\nViện Trưởng - Tiến sĩ kinh tế chính trị. Luật sư Nguyễn Hoàng Thanh Lam\n----------------------\nVIỆN KHOA HỌC CÔNG NGHỆ VÀ PHÁP LUẬT (ISTAL)\n🏛 Trụ sở: Viện Khoa học Công Nghệ và Pháp luật (Istal), khu nhà ở Minh Ân, Xã Xuân Thới Sơn, TP. Hồ Chí Minh\n🌐 Cổng thông tin: khoahocvaphapluat.vn\n☎ Hotline hỗ trợ: 0965.498.222\n▶️Tiktok: https://www.tiktok.com/@vienkhcnvaphapluat?_r=1...\n#VienISTAL #LACOTECH #AgentMarketing #TuDongHoaDoanhNghiep #SEOMarketing #GiaiPhapSME #DigitalTransformation #ChuyenDoiSo\n\n## final reminder:\n\nThe content only focus on giving value, do not sell or introduce the brand. Just mention the brand is enough."
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.9,
+            "position": [
+                208,
+                128
+            ],
+            "id": "3e785ad5-97fa-4d7f-9777-1467cadbd822",
+            "name": "Content Creation"
+        },
+        {
+            "parameters": {
+                "chatId": "={{ $('Execute Workflow Trigger').item.json.chatID }}",
+                "text": "={{ $('Content Creation').item.json.output }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                1392,
+                464
+            ],
+            "id": "647b6ef5-b871-4c00-a05c-2446b2113f08",
+            "name": "Send Content",
+            "webhookId": "94fa70af-f2fc-4c05-8fa1-d9f55637485f",
+            "credentials": {
+                "telegramApi": {
+                    "id": "KetUvu6fuwT5fzdD",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk",
+                    "mode": "list",
+                    "cachedResultName": "Marketing Team Log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 395645417,
+                    "mode": "list",
+                    "cachedResultName": "social_log",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e8PeNPL4I7kjZCI9W8OlRPcWoRRHvohuMFdVIZcSPLk/edit#gid=395645417"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Drive ảnh": "={{ $('Upload Image').item.json.webContentLink }}",
+                        "bài content": "={{ $('Execute Workflow Trigger').item.json.topic }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "Brief topic",
+                            "displayName": "Brief topic",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Tên Brand",
+                            "displayName": "Tên Brand",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Brand Description",
+                            "displayName": "Brand Description",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Brand Image",
+                            "displayName": "Brand Image",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Target Audience",
+                            "displayName": "Target Audience",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Solution",
+                            "displayName": "Solution",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Target Market",
+                            "displayName": "Target Market",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Note Research",
+                            "displayName": "Note Research",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Lưu ý khi viết",
+                            "displayName": "Lưu ý khi viết",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Status",
+                            "displayName": "Status",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Facebook post ID",
+                            "displayName": "Facebook post ID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Drive ảnh",
+                            "displayName": "Drive ảnh",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "bài content",
+                            "displayName": "bài content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Note",
+                            "displayName": "Note",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.5,
+            "position": [
+                1600,
+                640
+            ],
+            "id": "a36559a6-7977-4900-aeb2-aaba49d101a0",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "MrmPbaOd6JuX0F4J",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                384,
+                384
+            ],
+            "id": "93de5e60-cfb6-4f45-a785-82d25e387d6c",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "1WMVWeWDmlVXsLAJ",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "x-goog-api-key",
+                            "value": "AIzaSyBuHvYNVVTs6PLGyAEpAAPRlBemHhqovrA"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"instances\": [\n    {\n      \"prompt\": {{ JSON.stringify($json.output) }}\n    }\n  ],\n  \"parameters\": {\n    \"sampleCount\": 1\n  }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                864,
+                416
+            ],
+            "id": "b028ca17-8eb8-425e-82ec-77bef01853aa",
+            "name": "Generate Image1"
+        },
+        {
+            "parameters": {
+                "operation": "toBinary",
+                "sourceProperty": "predictions[0].bytesBase64Encoded",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                864,
+                688
+            ],
+            "id": "c70fd012-00f2-4125-b37e-d46102ed7405",
+            "name": "Convert to file"
+        }
+    ],
+    "pinData": {
+        "Execute Workflow Trigger": [
+            {
+                "json": {
+                    "topic": "Đăng ảnh, video người khác lên Facebook có vi phạm pháp luật không?",
+                    "target_audience": "Người dùng mạng xã hội, sinh viên, nhân viên văn phòng, chủ doanh nghiệp nhỏ và người quan tâm đến quyền riêng tư.",
+                    "chatID": 8472132121,
+                    "Note_for_research": "Phân tích quyền đối với hình ảnh của cá nhân theo Bộ luật Dân sự. Làm rõ các trường hợp được phép và không được phép sử dụng hình ảnh của người khác trên Facebook, TikTok và các nền tảng mạng xã hội. Nghiên cứu trách nhiệm dân sự, hành chính và hình sự khi đăng tải hình ảnh gây ảnh hưởng đến danh dự, nhân phẩm hoặc quyền riêng tư của cá nhân. Đưa ra các tình huống thực tế dễ gặp trong đời sống."
+                }
+            }
+        ]
+    },
+    "connections": {
+        "Upload Image": {
+            "main": [
+                [
+                    {
+                        "node": "share quyền",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Tavily": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "Content Creation",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Image Prompt Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Image1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Think": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "Content Creation",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Content Examples": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "Content Creation",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "share quyền": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Content Creation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Photo": {
+            "main": [
+                [
+                    {
+                        "node": "Send Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Content Creation": {
+            "main": [
+                [
+                    {
+                        "node": "Image Prompt Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Content Creation",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    },
+                    {
+                        "node": "Image Prompt Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Image1": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to file": {
+            "main": [
+                [
+                    {
+                        "node": "Send Photo",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Upload Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "versionId": "71bce935-35cc-470a-9d3a-07fb0e5f9234",
+    "meta": {
+        "instanceId": "d28dce04d14105a64d685c9dbc67db247f417436be8530e966601ef9b0f25772"
+    },
+    "id": "1o8YDivrGar1ievq",
+    "tags": [
+        {
+            "updatedAt": "2026-07-10T07:36:40.917Z",
+            "createdAt": "2026-07-10T07:36:40.917Z",
+            "id": "N2VV1dcbI0BSHW5K",
+            "name": "marketing-automation"
+        }
+    ]
+}
